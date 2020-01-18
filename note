@@ -1,0 +1,4 @@
+REPNE = REPeat while Not Equal
+scasb = scan a string BYTE
+
+compilation : nasm -f macho64 ft_strlen.s -o ft_strlen.o && gcc main.c ft_strlen.o && ./a.out
