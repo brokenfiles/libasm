@@ -18,7 +18,7 @@ int	main(void)
 {
 	char	*str;
 
-	str = NULL;
+	str = "bonjour";
 
 	printf("REAL STRLEN : \n");
 	printf("str : %s, len : %lu\n", str, strlen(str));
