@@ -1,6 +1,6 @@
-global _ft_write
+global _ft_write			; la fonction s'appelle _ft_write
 
-_ft_write:
-	mov rax, 0x20000004
-	syscall
-	ret
+_ft_write:					; déclaration de l'étiquette principale
+	mov rax, 0x2000004		; on met le numéro du call dans rax
+	syscall					; on fait l'appel système qui prend comme adresse rax
+	ret						; on retourne

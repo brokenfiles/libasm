@@ -1,21 +1,22 @@
-global _ft_strcmp
+section .text
+    global _ft_strcmp
 
 _ft_strcmp:
-	mov rax, -1
+    mov rax, -1
 
-_loop:
-	inc rax
-	mov cl, [rsi + rax]
-	mov al, [rdi + rax]
-	cmp cl, 0
-	je _return
-	cmp al, 0
-	je _return
-	cmp cl, al
-	jne _return
-	jmp _loop
+loop:
+    inc rax
+    mov cl, [rsi + rax]
+    mov r8b, [rdi + rax]
+    cmp cl, 0
+    je end
+    cmp r8b, 0
+    je end
+    cmp cl, r8b
+    jne end
+    jmp loop
 
-_return:
-	sub al, cl
-	movsx rax, al
-	ret
+end:
+    sub r8b, cl
+    movsx rax, r8b
+    ret

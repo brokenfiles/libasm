@@ -11,11 +11,14 @@
 /* ************************************************************************** */
 
 #include <libc.h>
+#include "colors.h"
 
 unsigned long	ft_strlen(char *str);
 int	ft_write(int fildes, const void *buf, size_t nbyte);
 int	ft_read(int fildes, const void *buf, size_t nbyte);
 int	ft_strcmp(const char *s1, const char *s2);
+char *ft_strcpy(char *dst, const char *src);
+char *ft_strdup(const char *s1);
 
 int		header(char *str)
 {
@@ -28,36 +31,37 @@ int		header(char *str)
 	equals = total_len - len - 2;
 	test = ((float)equals / 2.0f);
 	len = (int)test;
-	printf("\033[0;35m");
+	printf(MAGENTA);
 	if ((float)len - test < 0.0f)
 		printf("=");
 	while (index++ < equals / 2)
 		printf("=");
-	printf(" \033[0;32m%s\033[0;35m ", str);
+	printf(" %s%s%s ", GREEN, str, MAGENTA);
 	index = 0;
 	while (index++ < equals / 2)
 		printf("=");
-	printf("\033[0;0m\n");
+	printf("%s\n", RESET);
 	return (total_len - 1);
 }
 
 void	footer(int len)
 {
-	printf("\033[0;35m");
+	printf(MAGENTA);
 	while (len -- >= 0)
 		printf("=");
-	printf("\033[0;0m\n");
+	printf(RESET);
+	printf("\n");
 }
 
 int		main(void)
 {
 	int		fd;
-	char	*str, *str2;
+	char	*str, *str2, *tmp;
 	int		ret, h;
 	char	buffer[21];
 
-	str = "yo lekip";
-	str2 = "bonjourr";
+	str =  ft_strdup("yo lekip");
+	str2 = ft_strdup("yo lekop");
 
 	h = header("Libasm tester");
 	printf("\033[0;34mThis color \033[0;0m= libasm code\033[0;0m\n");
@@ -71,7 +75,7 @@ int		main(void)
 	footer(h);
 
 	h = header("ft_strcmp test");
-	printf("\033[0;34mft_strcmp(\"%s\", \"%s\") = %d\033[0;0m\n", str, str2, strcmp(str, str2));
+	printf("\033[0;34mft_strcmp(\"%s\", \"%s\") = %d\033[0;0m\n", str, str2, ft_strcmp(str, str2));
 	printf("\033[0;33mstrcmp(\"%s\", \"%s\") = %d\033[0;0m\n", str, str2, strcmp(str, str2));
 	footer(h);
 
@@ -94,5 +98,31 @@ int		main(void)
 	printf("\033[0;33mbuffer: %s\033[0;0m\n", buffer);
 	close(fd);
 	footer(h);
+
+	h = header("ft_strcpy test");
+	printf("\033[0;34mstr : %s, str2 : %s\n", str, str2);
+	ft_strcpy(str, str2);
+	printf("\033[0;34mft_strcpy(str, str2)\033[0;0m\n");
+	printf("\033[0;34mstr : %s, str : %s\n", str, str2);
+	free(str);
+	str = ft_strdup("yo lekip");
+	printf("\033[0;33mstr : %s, str2 : %s\n", str, str2);
+	strcpy(str, str2);
+	printf("\033[0;33mstrcpy(str, str2)\033[0;0m\n");
+	printf("\033[0;33mstr : %s, str2 : %s\n", str, str2);
+	free(str2);
+	footer(h);
+
+	h = header("ft_strdup test");
+	char *allocated = ft_strdup("ca marche!");
+	printf("\033[0;34mft_strdup(\"ca marche!\") = %s\033[0;0m\n", allocated);
+	printf("\033[0;34mallocated[0] = \'%c\'\n", allocated[0]);
+	free(allocated);
+	allocated = strdup("yo lekip");
+	printf("\033[0;33mstrdup(\"yo lekip\") = %s\033[0;0m\n", allocated);
+	printf("\033[0;33mallocated[0] = \'%c\'\n", allocated[0]);
+	free(allocated);
+	footer(h);
+
 	return (0);
 }
