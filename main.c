@@ -6,19 +6,11 @@
 /*   By: llaurent <llaurent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 16:14:42 by llaurent          #+#    #+#             */
-/*   Updated: 2020/01/23 14:39:24 by llaurent         ###   ########.fr       */
+/*   Updated: 2020/02/10 14:05:36 by llaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libc.h>
-#include "colors.h"
-
-unsigned long	ft_strlen(char *str);
-int	ft_write(int fildes, const void *buf, size_t nbyte);
-int	ft_read(int fildes, const void *buf, size_t nbyte);
-int	ft_strcmp(const char *s1, const char *s2);
-char *ft_strcpy(char *dst, const char *src);
-char *ft_strdup(const char *s1);
+#include "libasm.h"
 
 int		header(char *str)
 {
@@ -57,7 +49,7 @@ int		main(void)
 {
 	int		fd;
 	char	*str, *str2, *tmp;
-	int		ret, h;
+	int		ret, h, ret1, ret2;
 	char	buffer[21];
 
 	str =  ft_strdup("yo lekip");
@@ -70,30 +62,47 @@ int		main(void)
 	printf("\n");
 
 	h = header("ft_strlen test");
-	printf("\033[0;34mft_strlen(\"%s\") = %lu\033[0;0m\n", str, ft_strlen(str));
-	printf("\033[0;33mstrlen(\"%s\") = %lu\033[0;0m\n", str, strlen(str));
+	printf("\033[0;34mft_strlen(\"%s\") = %d\033[0;0m\n", str, (ret1 = (int)ft_strlen(str)));
+	printf("\033[0;33mstrlen(\"%s\") = %d\033[0;0m\n", str, (ret2 = (int)strlen(str)));
+	printf("\033[0;36m-- check: %d = %d ? %s\033[0;36m --\033[0;0m\n", ret1, ret2, ret1 == ret2 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
+	printf("\033[0;34mft_strlen(\"\") = %d\033[0;0m\n", (ret1 = (int)ft_strlen("")));
+	printf("\033[0;33mstrlen(\"\") = %d\033[0;0m\n", (ret2 = (int)strlen("")));
+	printf("\033[0;36m-- check: %d = %d ? %s\033[0;36m --\033[0;0m\n", ret1, ret2, ret1 == ret2 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
 	footer(h);
 
 	h = header("ft_strcmp test");
-	printf("\033[0;34mft_strcmp(\"%s\", \"%s\") = %d\033[0;0m\n", str, str2, ft_strcmp(str, str2));
-	printf("\033[0;33mstrcmp(\"%s\", \"%s\") = %d\033[0;0m\n", str, str2, strcmp(str, str2));
+	printf("\033[0;34mft_strcmp(\"%s\", \"%s\") = %d\033[0;0m\n", str, str2, (ret1 = ft_strcmp(str, str2)));
+	printf("\033[0;33mstrcmp(\"%s\", \"%s\") = %d\033[0;0m\n", str, str2, (ret2 = strcmp(str, str2)));
+	printf("\033[0;36m-- check: %d = %d ? %s\033[0;36m --\033[0;0m\n", ret1, ret2, ret1 == ret2 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
+	printf("\033[0;34mft_strcmp(\"bonjour\", \"cc\") = %d\033[0;0m\n", (ret1 = ft_strcmp("bonjour", "cc")));
+	printf("\033[0;33mstrcmp(\"bonjour\", \"cc\") = %d\033[0;0m\n", (ret2 = strcmp("bonjour", "cc")));
+	printf("\033[0;36m-- check: %d = %d ? %s\033[0;36m --\033[0;0m\n", ret1, ret2, ret1 == ret2 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
+	printf("\033[0;34mft_strcmp(\"cc\", \"bonjour\") = %d\033[0;0m\n", (ret1 = ft_strcmp("cc", "bonjour")));
+	printf("\033[0;33mstrcmp(\"cc\", \"bonjour\") = %d\033[0;0m\n", (ret2 = strcmp("cc", "bonjour")));
+	printf("\033[0;36m-- check: %d = %d ? %s\033[0;36m --\033[0;0m\n", ret1, ret2, ret1 == ret2 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
 	footer(h);
 
 	h = header("ft_write test");
 	printf("\033[1;31m🚨 In this test, the output is before the call.\033[0;0m\n");
-	printf("\033[0;34mft_write(1, \"%s\", 3) = %d\033[0;0m\n", "yo\\n", ft_write(1, "yo\n", 3));
-	printf("\033[0;33mwrite(1, \"%s\", 3) = %zd\033[0;0m\n", "yo\\n", write(1, "yo\n", 3));
+	printf("\033[0;34mft_write(1, \"%s\", 3) = %d\033[0;0m\n", "yo\\n", (ret1 = ft_write(1, "yo\n", 3)));
+	printf("\033[0;33mwrite(1, \"%s\", 3) = %d\033[0;0m\n", "yo\\n", (ret2 = write(1, "yo\n", 3)));
+	printf("\033[0;36m-- check: %d = %d ? %s\033[0;36m --\033[0;0m\n", ret1, ret2, ret1 == ret2 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
+	printf("\033[1;31m🚨 In this test, I'll write inside \"test_file\".\033[0;0m\n");
+	printf("\033[0;36mopen(\"test_file\", O_RDWR) [fd = %d]\033[0;0m\n", (fd = open("test_file", O_RDWR | O_CREAT, 0644)));
+	printf("\033[0;34mft_write(%d, \"%s\", 7) = %d\033[0;0m\n", fd, "COUCOU\\n", (ret1 = ft_write(fd, "COUCOU\n", 7)));
+	printf("\033[0;33mwrite(%d, \"%s\", 7) = %d\033[0;0m\n", fd, "COUCOU\\n", (ret2 = write(fd, "COUCOU\n", 7)));
+	printf("\033[0;36m-- check: %d = %d ? %s\033[0;36m --\033[0;0m\n", ret1, ret2, ret1 == ret2 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
 	footer(h);
 
 	h = header("ft_read test");
 	printf("\033[1;31m🚨 In this test, I'll read content from Makefile.\033[0;0m\n");
 	printf("\033[0;34mfd = open(\"Makefile\", O_RDONLY) >> [fd = %d]\n", (fd = open("Makefile", O_RDONLY)));
-	printf("\033[0;34mft_read(1, buffer, 20) = %d\033[0;0m\n", (ret = ft_read(fd, buffer, 20)));
+	printf("\033[0;34mft_read(%d, buffer, 20) = %d\033[0;0m\n", fd, (ret = ft_read(fd, buffer, 20)));
 	buffer[20] = 0;
 	printf("\033[0;34mbuffer: %s\033[0;0m\n", buffer);
 	close(fd);
 	printf("\033[0;33mfd = open(\"Makefile\", O_RDONLY) >> [fd = %d]\n", (fd = open("Makefile", O_RDONLY)));
-	printf("\033[0;33mread(1, buffer, 20) = %d\033[0;0m\n", (ret = read(fd, buffer, 20)));
+	printf("\033[0;33mread(%d, buffer, 20) = %d\033[0;0m\n", fd, (ret = read(fd, buffer, 20)));
 	buffer[20] = 0;
 	printf("\033[0;33mbuffer: %s\033[0;0m\n", buffer);
 	close(fd);
@@ -104,12 +113,14 @@ int		main(void)
 	ft_strcpy(str, str2);
 	printf("\033[0;34mft_strcpy(str, str2)\033[0;0m\n");
 	printf("\033[0;34mstr : %s, str : %s\n", str, str2);
+	printf("\033[0;36m-- check: %s = %s ? %s\033[0;36m --\033[0;0m\n", str, str2, strcmp(str, str2) == 0 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
 	free(str);
 	str = ft_strdup("yo lekip");
 	printf("\033[0;33mstr : %s, str2 : %s\n", str, str2);
 	strcpy(str, str2);
 	printf("\033[0;33mstrcpy(str, str2)\033[0;0m\n");
 	printf("\033[0;33mstr : %s, str2 : %s\n", str, str2);
+	printf("\033[0;36m-- check: %s = %s ? %s\033[0;36m --\033[0;0m\n", str, str2, strcmp(str, str2) == 0 ? "\033[1;32m[OK]" : "\033[1;31m[KO]");
 	free(str2);
 	footer(h);
 
@@ -118,10 +129,12 @@ int		main(void)
 	printf("\033[0;34mft_strdup(\"ca marche!\") = %s\033[0;0m\n", allocated);
 	printf("\033[0;34mallocated[0] = \'%c\'\n", allocated[0]);
 	free(allocated);
+	printf("\033[0;36mfree: \033[1;32m[OK]\033[0;0m\n");
 	allocated = strdup("yo lekip");
 	printf("\033[0;33mstrdup(\"yo lekip\") = %s\033[0;0m\n", allocated);
 	printf("\033[0;33mallocated[0] = \'%c\'\n", allocated[0]);
 	free(allocated);
+	printf("\033[0;36mfree: \033[1;32m[OK]\033[0;0m\n");
 	footer(h);
 
 	return (0);

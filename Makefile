@@ -27,7 +27,7 @@ clean:
 			@echo "\033[1;31m> Removing ${OBJS}\033[0;0m"
 
 fclean:		clean
-			@rm -f ${NAME}
+			@rm -f ${NAME} ${NAME_OBJ}
 			@echo "\033[1;34m> Removing ${NAME}\033[0;0m"
 
 re:			fclean all
